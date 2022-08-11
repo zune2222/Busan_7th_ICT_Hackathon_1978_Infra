@@ -1,0 +1,44 @@
+version: "3"
+services:
+  nginx:
+    container_name: "nginx"
+    restart: unless-stopped
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    ports:
+      - "8080:80"
+    depends_on:
+      - 1987-backend
+      - 1987-ai
+
+  1987-backend:
+    container_name: "1987-backend"
+    build:
+      context: ./1987-backend
+      dockerfile: Dockerfile
+    ports:
+      - "2001:2001"
+    command: sleep infinity
+    depends_on:
+      - 1987-db
+
+  1987-ai:
+    container_name: "1987-ai"
+    build:
+      context: ./1987-ai
+      dockerfile: Dockerfile
+    ports:
+      - "2002:2002"
+    command: sleep infinity
+
+  1987-db:
+    container_name: "1987-db"
+    build:
+      context: ./1987-db
+      dockerfile: Dockerfile
+    ports:
+      - "3306:3306"
+    restart: always
