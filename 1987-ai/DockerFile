@@ -1,0 +1,18 @@
+FROM python:3.9
+
+USER root
+
+WORKDIR /usr/app/src
+
+RUN apt-get update
+RUN apt-get upgrade -y
+RUN apt-get install -y git nodejs npm nano
+
+RUN git clone https://github.com/zune2222/Busan_7th_ICT_Hackathon_1978_AI.git ./
+RUN git checkout -B main
+RUN git pull origin main
+
+COPY ./yolov3-spp.weights /usr/app/src/human_detection/yolo/yolov3-spp.weights
+
+RUN pip install -r requirements.txt
+RUN npm install --location=global pm2

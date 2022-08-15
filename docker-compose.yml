@@ -5,40 +5,49 @@ services:
     restart: unless-stopped
     build:
       context: ./nginx
-      dockerfile: Dockerfile
+      dockerfile: DockerFile
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d
     ports:
-      - "8080:80"
+      - "8090:80"
     depends_on:
       - 1987-backend
       - 1987-ai
+    networks:
+      - 1987-network
 
   1987-backend:
     container_name: "1987-backend"
     build:
       context: ./1987-backend
-      dockerfile: Dockerfile
+      dockerfile: DockerFile
     ports:
       - "2001:2001"
     command: sleep infinity
     depends_on:
       - 1987-db
+    networks:
+      - 1987-network
 
   1987-ai:
     container_name: "1987-ai"
     build:
       context: ./1987-ai
-      dockerfile: Dockerfile
+      dockerfile: DockerFile
     ports:
       - "2002:2002"
     command: sleep infinity
+    networks:
+      - 1987-network
 
   1987-db:
     container_name: "1987-db"
     build:
       context: ./1987-db
-      dockerfile: Dockerfile
+      dockerfile: DockerFile
     ports:
       - "3306:3306"
     restart: always
+networks:
+  1987-network:
+    driver: bridge
