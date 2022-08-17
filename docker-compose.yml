@@ -48,6 +48,8 @@ services:
     ports:
       - "3306:3306"
     restart: always
+    networks:
+      - 1987-network
 networks:
   1987-network:
     driver: bridge
